@@ -17,13 +17,11 @@ CONFIG_SCHEMA = M5STACK_PPS_COMPONENT_SCHEMA.extend(
             OutputVoltageNumber,
             device_class=DEVICE_CLASS_VOLTAGE,
             entity_category=ENTITY_CATEGORY_CONFIG,
-            icon="mdi:arrow-collapse-up"
         ),
         cv.Optional(CONF_CURRENT): number.number_schema(
             OutputCurrentNumber,
             device_class=DEVICE_CLASS_CURRENT,
             entity_category=ENTITY_CATEGORY_CONFIG,
-            icon="mdi:dc-current"
         ),
     }
 )
