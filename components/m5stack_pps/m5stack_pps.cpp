@@ -20,9 +20,15 @@ void M5StackPPSComponent::setup() {
     pps_.getUID(uid, uid+1, uid+2);
     ESP_LOGD(TAG, "PPS UID : %08x:%08x:%08x", uid[0], uid[1], uid[2]);
 
-    pps_.setPowerEnable(false);
-    pps_.setOutputVoltage(0.5);
-    pps_.setOutputCurrent(0.001);
+    if (output_voltage_number_ != nullptr) {
+        output_voltage_number_->publish_state(0.5);
+    }
+    if (output_current_number_ != nullptr) {
+        output_current_number_->publish_state(0.0);
+    }
+    if (output_enable_switch_ != nullptr) {
+        output_enable_switch_->publish_state(false);
+    }
 }
 
 void M5StackPPSComponent::update() {
