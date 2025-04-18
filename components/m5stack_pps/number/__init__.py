@@ -40,7 +40,7 @@ async def to_code(config):
 
     if current_config := config.get(CONF_CURRENT):
         n = await number.new_number(
-            current_config, min_value=0, max_value=5, step=0.1
+            current_config, min_value=0, max_value=5, step=0.05
         )
         await cg.register_parented(n, config[CONF_M5STACK_PPS_ID])
         cg.add(m5stack_pps_component.set_output_current_number(n))
