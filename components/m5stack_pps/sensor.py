@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import i2c, sensor
+from esphome.components import i2c, sensor, web_server
 from esphome.const import (
     CONF_ID,
     CONF_MODE,
@@ -42,8 +42,8 @@ TYPES = {
 }
 
 CONFIG_SCHEMA = M5STACK_PPS_COMPONENT_SCHEMA.extend(
-    {cv.Optional(type): schema for type, schema in TYPES.items()}
-)
+        {cv.Optional(type): schema for type, schema in TYPES.items()}
+    ).extend(web_server.WEBSERVER_SORTING_SCHEMA)
 
 
 async def to_code(config):

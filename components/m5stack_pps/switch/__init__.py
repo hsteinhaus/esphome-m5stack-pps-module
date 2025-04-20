@@ -1,5 +1,5 @@
 import esphome.codegen as cg
-from esphome.components import switch
+from esphome.components import switch, web_server
 import esphome.config_validation as cv
 from esphome.const import (
     DEVICE_CLASS_SWITCH,
@@ -24,7 +24,7 @@ CONFIG_SCHEMA = M5STACK_PPS_COMPONENT_SCHEMA.extend(
             icon=ICON_PULSE,
         ),
     }
-)
+).extend(web_server.WEBSERVER_SORTING_SCHEMA)
 
 async def to_code(config):
     m5stack_pps_component = await cg.get_variable(config[CONF_M5STACK_PPS_ID])

@@ -1,6 +1,6 @@
 import esphome.config_validation as cv
 import esphome.codegen as cg
-from esphome.components import number, i2c
+from esphome.components import number, web_server
 from esphome.const import CONF_ID, CONF_MODE, CONF_VOLTAGE, CONF_CURRENT, DEVICE_CLASS_VOLTAGE, DEVICE_CLASS_CURRENT, ENTITY_CATEGORY_CONFIG
 
 from .. import CONF_M5STACK_PPS_ID, M5STACK_PPS_COMPONENT_SCHEMA, m5stack_pps_ns, M5StackPPSComponent
@@ -24,7 +24,7 @@ CONFIG_SCHEMA = M5STACK_PPS_COMPONENT_SCHEMA.extend(
             entity_category=ENTITY_CATEGORY_CONFIG,
         ),
     }
-)
+).extend(web_server.WEBSERVER_SORTING_SCHEMA)
 
 
 

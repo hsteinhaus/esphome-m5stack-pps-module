@@ -39,6 +39,10 @@ web_server:
   #ota: true
   local: true
   version: 3
+  sorting_groups:
+    - id: pps_group
+      name: "Power Supply Module"
+      sorting_weight: 90
 
 # Enable logging
 logger:
@@ -92,6 +96,8 @@ sensor:
     power:
       id: actual_power
       name: "Actual power"
+    web_server:
+      sorting_group_id: pps_group
 
 number:
   - platform: m5stack_pps
