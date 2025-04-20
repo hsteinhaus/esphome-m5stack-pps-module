@@ -1,9 +1,10 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import i2c, sensor, web_server
+from esphome.components import i2c, sensor
 from esphome.const import (
     CONF_ID,
     CONF_MODE,
+    CONF_CHANNEL,
     CONF_CURRENT,
     CONF_VOLTAGE,
     CONF_POWER,
@@ -15,8 +16,7 @@ from esphome.const import (
     UNIT_WATT,
 )
 
-from . import CONF_M5STACK_PPS_ID, M5STACK_PPS_COMPONENT_SCHEMA
-
+from .. import CONF_M5STACK_PPS_ID, M5STACK_PPS_COMPONENT_SCHEMA, m5stack_pps_ns, M5StackPPSComponent
 
 DEPENDENCIES = ["i2c"]
 
@@ -41,16 +41,27 @@ TYPES = {
     ),
 }
 
+InputSensor = m5stack_pps_ns.class_("InputSensor", cg.Component, sensor.Sensor)
+SensorChannel = m5stack_pps_ns.enum("OutputChannel")
+
+SENSOR_CHANNELS = {
+    CONF_MODE: SensorChannel.POWER,
+    CONF_VOLTAGE: SensorChannel.VOLTAGE,
+    CONF_CURRENT: SensorChannel.CURRENT,
+    CONF_POWER: SensorChannel.POWER,
+}
+
 CONFIG_SCHEMA = M5STACK_PPS_COMPONENT_SCHEMA.extend(
-        {cv.Optional(type): schema for type, schema in TYPES.items()}
-    ).extend(web_server.WEBSERVER_SORTING_SCHEMA)
+    {cv.GenerateID(): cv.declare_id(InputSensor)}
+).extend({cv.Optional(channel): schema for channel, schema in TYPES.items()})
+
 
 
 async def to_code(config):
-    parent = await cg.get_variable(config[CONF_M5STACK_PPS_ID])
+    paren = await cg.get_variable(config[CONF_M5STACK_PPS_ID])
+    var = cg.new_Pvariable(config[CONF_ID])
 
-    for type, _ in TYPES.items():
-        if type in config:
-            conf = config[type]
-            sens = await sensor.new_sensor(conf)
-            cg.add(getattr(parent, f"set_{type}_sensor")(sens))
+    for channel in TYPES:
+        if channel_config := config.get(channel):
+            sens = await sensor.new_sensor(channel_config)
+            cg.add(getattr(paren, f"set_{channel}_sensor")(sens))
