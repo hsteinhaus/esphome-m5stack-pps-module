@@ -6,7 +6,7 @@
 namespace esphome {
 namespace m5stack_pps {
 
-class OutputEnableSwitch : public switch_::Switch, public Parented<M5StackPPSComponent> {
+class OutputEnableSwitch : public Component, public switch_::Switch, public Parented<M5StackPPSComponent> {
  public:
  OutputEnableSwitch() = default;
 

@@ -6,30 +6,27 @@ from esphome.const import (
     ENTITY_CATEGORY_CONFIG,
     ICON_BLUETOOTH,
     ICON_PULSE,
+    CONF_ID,
 )
 
 from .. import CONF_M5STACK_PPS_ID, M5STACK_PPS_COMPONENT_SCHEMA, m5stack_pps_ns, M5StackPPSComponent
 
-OutputEnableSwitch = m5stack_pps_ns.class_("OutputEnableSwitch", switch.Switch)
+OutputEnableSwitch = m5stack_pps_ns.class_("OutputEnableSwitch", cg.Component, switch.Switch)
 
 CONF_OUTPUT_ENABLE = "output_enable"
 
-CONFIG_SCHEMA = M5STACK_PPS_COMPONENT_SCHEMA.extend(
-    {
-        cv.GenerateID(CONF_M5STACK_PPS_ID): cv.use_id(M5StackPPSComponent),
-        cv.Optional(CONF_OUTPUT_ENABLE): switch.switch_schema(
-            OutputEnableSwitch,
-            device_class=DEVICE_CLASS_SWITCH,
-            entity_category=ENTITY_CATEGORY_CONFIG,
-            icon=ICON_PULSE,
-        ),
-    }
-).extend(web_server.WEBSERVER_SORTING_SCHEMA)
+CONFIG_SCHEMA = cv.All(
+    switch.switch_schema(OutputEnableSwitch, default_restore_mode="DISABLED")
+      .extend(cv.COMPONENT_SCHEMA)
+      .extend({
+        cv.Required(CONF_M5STACK_PPS_ID): cv.use_id(M5StackPPSComponent),
+      })
+)
 
 async def to_code(config):
-    m5stack_pps_component = await cg.get_variable(config[CONF_M5STACK_PPS_ID])
-
-    if mode_config := config.get(CONF_OUTPUT_ENABLE):
-        s = await switch.new_switch(mode_config)
-        await cg.register_parented(s, config[CONF_M5STACK_PPS_ID])
-        cg.add(m5stack_pps_component.set_output_enable_switch(s))
+    var = cg.new_Pvariable(config[CONF_ID])
+    await cg.register_component(var, config)
+    await switch.register_switch(var, config)
+    paren = await cg.get_variable(config[CONF_M5STACK_PPS_ID])
+    cg.add(var.set_parent(paren))
+    cg.add(paren.set_output_enable_switch(var))
