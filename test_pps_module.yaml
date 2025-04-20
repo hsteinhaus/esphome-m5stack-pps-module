@@ -101,12 +101,29 @@ sensor:
 
 number:
   - platform: m5stack_pps
-    voltage:
-      name: "Voltage"
-      id: set_voltage
-    current:
-      name: "Current"
-      id: set_current
+    m5stack_pps: pps1
+    channel: voltage
+    name: "Voltage"
+    id: set_voltage
+    web_server:
+      sorting_group_id: pps_group
+
+  - platform: m5stack_pps
+    m5stack_pps: pps1
+    channel: current
+    name: "Current"
+    id: set_current
+    web_server:
+      sorting_group_id: pps_group
+
+  - platform: template
+    name: "Template number"
+    optimistic: true
+    min_value: 0
+    max_value: 100
+    step: 1
+    web_server:
+      sorting_group_id: pps_group
 
 switch:
   - platform: m5stack_pps
