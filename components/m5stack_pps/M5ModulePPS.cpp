@@ -4,12 +4,12 @@
 bool M5ModulePPS::writeBytes(uint8_t addr, uint8_t reg, uint8_t *buffer,
                              uint8_t length)
 {
-    ESP_LOGD("pps", "writing addr 0x%02x,  reg 0x%02x, len: %d", addr, reg, length);
+    ESP_LOGV("pps", "writing addr 0x%02x,  reg 0x%02x, len: %d", addr, reg, length);
     return _i2c_dev->write_bytes(reg, buffer, length);
 }
 
 bool M5ModulePPS::readBytes(uint8_t addr, uint8_t reg, uint8_t *buffer, uint8_t length) {
-    ESP_LOGD("pps", "reading addr 0x%02x,  reg 0x%02x, len: %d", addr, reg, length);
+    ESP_LOGV("pps", "reading addr 0x%02x,  reg 0x%02x, len: %d", addr, reg, length);
     return _i2c_dev->read_bytes(reg, buffer, length);
 }
 

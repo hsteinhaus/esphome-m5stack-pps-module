@@ -70,12 +70,12 @@ void M5StackPPSComponent::dump_config() {
 
 
 void M5StackPPSComponent::set_output_current(float current) {
-    ESP_LOGI(TAG, "setting output current to %f A", current);
+    ESP_LOGD(TAG, "setting output current to %f A", current);
     pps_.setOutputCurrent(current);
 }
 
 void M5StackPPSComponent::set_output_voltage(float voltage) {
-    ESP_LOGI(TAG, "setting output voltage to %f V", voltage);
+    ESP_LOGD(TAG, "setting output voltage to %f V", voltage);
     pps_.setOutputVoltage(voltage);
 }
 
